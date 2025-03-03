@@ -2,9 +2,9 @@ version: "3"
 services:
   nginx:
     restart: always
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+    image: nguyenquangtungnui/multi-nginx
+    mem_limit: 128m
+    hostname: nginx
     ports:
       - "80:80"
     depends_on:
@@ -21,9 +21,9 @@ services:
     image: redis:latest
   api:
     restart: always
-    build:
-      context: ./api
-      dockerfile: Dockerfile.dev
+    image: nguyenquangtungnui/multi-api
+    mem_limit: 128m
+    hostname: api
     volumes:
       - /app/node_modules
       - ./api:/app
@@ -40,9 +40,9 @@ services:
       - redis
   worker:
     restart: always
-    build:
-      context: ./worker
-      dockerfile: Dockerfile.dev
+    image: nguyenquangtungnui/multi-worker
+    mem_limit: 128m
+    hostname: worker
     volumes:
       - /app/node_modules
       - ./worker:/app
@@ -53,9 +53,9 @@ services:
       - redis
   client:
     restart: always
-    build:
-      context: ./client
-      dockerfile: Dockerfile.dev
+    image: nguyenquangtungnui/multi-client
+    mem_limit: 128m
+    hostname: client
     volumes:
       - /app/node_modules
       - ./client:/app

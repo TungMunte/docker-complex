@@ -1,0 +1,96 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "nguyenquangtungnui/multi-client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "api",
+      "image": "nguyenquangtungnui/multi-api",
+      "hostname": "api",
+      "essential": false,
+      "environment": [
+        {
+          "name": "REDIS_HOST",
+          "value": "redis"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "6379"
+        },
+        {
+          "name": "PGHOST",
+          "value": "postgres"
+        },
+        {
+          "name": "PGUSER",
+          "value": "postgres"
+        },
+        {
+          "name": "PGDATABASE",
+          "value": "postgres"
+        },
+        {
+          "name": "PGPASSWORD",
+          "value": "postgres_password"
+        },
+        {
+          "name": "PGPORT",
+          "value": "5432"
+        }
+      ]
+    },
+    {
+      "name": "worker",
+      "image": "nguyenquangtungnui/multi-worker",
+      "essential": false,
+      "environment": [
+        {
+          "name": "REDIS_HOST",
+          "value": "redis"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "6379"
+        }
+      ]
+    },
+    {
+      "name": "nginx",
+      "image": "nguyenquangtungnui/multi-nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "api"]
+    },
+    {
+      "name": "redis",
+      "image": "redis:latest",
+      "hostname": "redis",
+      "essential": true
+    },
+    {
+      "name": "postgres",
+      "image": "postgres:latest",
+      "hostname": "postgres",
+      "essential": true,
+      "environment": [
+        {
+          "name": "POSTGRES_USER",
+          "value": "postgres"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "value": "postgres_password"
+        }
+      ]
+    }
+  ]
+}
